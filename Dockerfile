@@ -1,5 +1,5 @@
 # latest official node image
-FROM node:latest
+FROM node:lts-slim
 
 MAINTAINER Asep Maulana Ismail <asepmaulanaismail@gmail.com>
 

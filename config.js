@@ -1,4 +1,5 @@
 module.exports = {
     // 'secret': 'asepmaulanaismail',
-    'database': 'mongodb://192.168.4.132:27017/jwt-auth-nodejs'
+    // 'database': 'mongodb://0.0.0.0:27017/jwt-auth-nodejs'
+    'database': 'mongo-server:27017/jwt-auth-nodejs'
 };
