@@ -1,7 +1,7 @@
 # latest official node image
 FROM node:lts-slim
 
-MAINTAINER Asep Maulana Ismail <asepmaulanaismail@gmail.com>
+LABEL maintainer="Kee Ming Yu <ming.k@hotmail.com>"
 
 # use nodemon for development
 RUN npm install -g nodemon
