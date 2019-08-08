@@ -7,6 +7,7 @@ var app = express();
 var bodyParser = require("body-parser");
 var morgan = require("morgan");
 var mongoose = require("mongoose");
+var cors = require("cors");
 
 var jwt = require("jsonwebtoken"); // used to create, sign, and verify tokens
 var config = require("./config"); // get our config file
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // use morgan to log requests to the console
+app.use(cors());
 app.use(morgan("dev"));
 
 // =======================
@@ -147,7 +149,7 @@ apiRoutes.post("/authenticate", function(req, res) {
             );
 
             var token = jwt.sign(payload, secretKey, {
-              expiresIn: 1440 // expires in 24 hours
+              expiresIn: 144000 // expires in 24 hours (in ms)
             });
 
             // return the information including token as JSON
