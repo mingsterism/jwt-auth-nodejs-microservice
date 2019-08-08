@@ -69,7 +69,7 @@ Params:
 
 ```Javascript
 {
-    "username": "asepmaulanaismail",
+    "email": "asepmaulanaismail",
     "password": "asep123!!",
     "deviceId": "1"
 }
@@ -97,7 +97,7 @@ Params:
 {
     "token": "<YOUR TOKEN HERE>",
     "deviceId": "1",
-    "username": "asepmaulanaismail"
+    "email": "asepmaulanaismail"
 }
 ```
 
@@ -121,7 +121,7 @@ Params:
 {
     "token": "<YOUR TOKEN HERE>",
     "deviceId": "1",
-    "username": "asepmaulanaismail"
+    "email": "asepmaulanaismail"
 }
 ```
 
@@ -146,7 +146,7 @@ Params:
 {
     "token": "<YOUR TOKEN HERE>",
     "deviceId": "1",
-    "username": "asepmaulanaismail"
+    "email": "asepmaulanaismail"
 }
 ```
 
@@ -156,7 +156,7 @@ Response:
 [
     {
         "_id": "5a5862d28c16852c84d79d78",
-        "username": "asepmaulanaismail",
+        "email": "asepmaulanaismail",
         "password": "asep123!!",
         "admin": true,
         "__v": 0
@@ -176,7 +176,7 @@ Params:
 {
     "token": "<YOUR TOKEN HERE>",
     "deviceId": "1",
-    "username": "asepmaulanaismail"
+    "email": "asepmaulanaismail"
 }
 ```
 

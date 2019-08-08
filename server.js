@@ -44,16 +44,16 @@ app.post("/setup", function(req, res) {
   console.log("posting data");
   var password =
     req.body.password || req.query.password || req.headers["x-access-password"];
-  var username =
-    req.body.username || req.query.username || req.headers["x-access-username"];
+  var email =
+    req.body.email || req.query.email || req.headers["x-access-email"];
   var organisation =
     req.body.organisation ||
     req.query.organisation ||
     req.headers["x-access-organisation"];
-  if (!username) {
+  if (!email) {
     res.json({
       success: false,
-      message: "User creation failed. Username not found."
+      message: "User creation failed. Email not found."
     });
   } else if (!password) {
     res.json({
@@ -68,7 +68,7 @@ app.post("/setup", function(req, res) {
   } else {
     // create a sample user
     var asep = new User({
-      username,
+      email,
       password,
       admin: true,
       organisation
@@ -94,7 +94,7 @@ apiRoutes.post("/authenticate", function(req, res) {
   // find the user
   User.findOne(
     {
-      username: req.body.username
+      email: req.body.email
     },
     function(err, user) {
       if (err) {
@@ -124,19 +124,19 @@ apiRoutes.post("/authenticate", function(req, res) {
             // we don't want to pass in the entire user since that has the password
             const payload = {
               admin: user.admin,
-              username: user.username
+              email: user.email
             };
             var secretKey = uniqid();
             // save session to db
             var sess = {
-              username: req.body.username,
+              email: req.body.email,
               deviceId: req.body.deviceId,
               admin: user.admin,
               secret: secretKey
             };
             Session.findOneAndUpdate(
               {
-                username: req.body.username,
+                email: req.body.email,
                 deviceId: req.body.deviceId
               },
               sess,
@@ -174,18 +174,18 @@ var verifyToken = function(req, res, callback) {
     req.body.deviceId ||
     req.query.deviceId ||
     req.headers["x-access-device-id"];
-  var username =
-    req.body.username || req.query.username || req.headers["x-access-username"];
+  var email =
+    req.body.email || req.query.email || req.headers["x-access-email"];
   if (!deviceId) {
     return res.status(403).send({
       success: false,
       message: "No Device ID provided."
     });
   }
-  if (!username) {
+  if (!email) {
     return res.status(403).send({
       success: false,
-      message: "No Username provided."
+      message: "No Email provided."
     });
   }
   if (!token) {
@@ -196,7 +196,7 @@ var verifyToken = function(req, res, callback) {
   }
   // get secret key on db
   var sess = Session.findOne(
-    { deviceId: deviceId, username: username },
+    { deviceId: deviceId, email: email },
     function(err, session) {
       if (err) {
         return res.status(200).json({ success: false, message: err.message });
@@ -253,12 +253,12 @@ apiRoutes.post("/logout", function(req, res) {
     req.body.deviceId ||
     req.query.deviceId ||
     req.headers["x-access-device-id"];
-  var username =
-    req.body.username || req.query.username || req.headers["x-access-username"];
+  var email =
+    req.body.email || req.query.email || req.headers["x-access-email"];
   // decode token
-  if (token && deviceId && username) {
+  if (token && deviceId && email) {
     // remove session key on db
-    Session.find({ deviceId: deviceId, username: username })
+    Session.find({ deviceId: deviceId, email: email })
       .remove()
       .exec(function(err, data) {
         if (err) {
