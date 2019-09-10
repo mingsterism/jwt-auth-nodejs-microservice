@@ -1,7 +1,7 @@
 steps: 
     - name: "gcr.io/cloud-builders/docker"
-      args: ["build", "-t", "asia.gcr.io/$PROJECT_ID/jwt:v1", "."]
+      args: ["build", "-t", "asia.gcr.io/$PROJECT_ID/jwt", "."]
       env: 
         - 'PROJECT_ID=zoa001'
-images: ["asia.gcr.io/$PROJECT_ID/jwt:v1"]
+images: ["asia.gcr.io/$PROJECT_ID/jwt"]
 
