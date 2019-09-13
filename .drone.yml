@@ -13,7 +13,7 @@ steps:
   commands:
     - gcloud config set project zoa001 
     - gcloud auth activate-service-account zoa-service-acct@zoa001.iam.gserviceaccount.com --key-file=/root/secrets/.creds.json
-- name: cloudbuild graphql-server 
+- name: cloudbuild jwt-auth-nodejs-microservice 
   commands:
     - gcloud builds submit
 - name: docker compose (deploy)
