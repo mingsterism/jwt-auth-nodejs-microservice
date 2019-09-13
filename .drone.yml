@@ -1,17 +1,4 @@
 kind: pipeline
-name: social-notify 
-
-steps:
-- name: start notify slack 
-  image: plugins/slack
-  settings:
-    webhook: https://hooks.slack.com/services/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
-    channel: cicd
-    template: >
-        Build {{build.number}} of {{build.branch}} started on {{repo.name}}. {{build.link}}
-
----
-kind: pipeline
 type: ssh
 name: default
 
@@ -22,41 +9,15 @@ server:
         from_secret: key002
 
 steps:
-- name: clone and set up secrets
-  commands:
-    - cd /root/ 
-    - cat .gitconfig 
-    - sh cloneinit.sh 
-    - sh setupsecrets.sh
 - name: auth server
   commands:
     - gcloud config set project zoa001 
     - gcloud auth activate-service-account zoa-service-acct@zoa001.iam.gserviceaccount.com --key-file=/root/secrets/.creds.json
-- name: cloudbuild jwt-auth-nodejs-microservice 
+- name: cloudbuild graphql-server 
   commands:
-    - cd /root/zoa/jwt-auth-nodejs-microservice
     - gcloud builds submit
-#- name: docker compose (deploy)
-#  commands:
-#    - cd /root/zoa
-#    - docker-compose up
+- name: docker compose (deploy)
+  commands:
+    - cp /root/docker-compose.yml .
+    - docker-compose up -d --force-recreate 
 
----
-kind: pipeline
-name: social-notify-status 
-
-steps:
-- name: end notify slack 
-  image: plugins/slack
-  settings:
-    webhook: https://hooks.slack.com/services/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
-    channel: cicd
-    template: >
-      {{#success build.status}}
-        Build {{build.number}} of {{build.branch}} on {{repo.name}} successful. {{build.link}}
-      {{else}}
-        Build {{build.number}} of {{build.branch}} on {{repo.name}} failed. Please fix!. {{build.link}}
-      {{/success}}
-
-depends_on:
-- default 
