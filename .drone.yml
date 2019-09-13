@@ -20,7 +20,7 @@ steps:
   commands:
     - cp /root/docker-compose.yml .
     - docker-compose up -d --force-recreate 
-- name: slack-success
+- name: slack
   commands: 
     - cp /root/slack/message.sh .
     - sh message.sh 
