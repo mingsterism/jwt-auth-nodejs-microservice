@@ -25,10 +25,6 @@ steps:
     - cp /root/slack/message.sh .
     - sh message.sh 
   when: 
-    status: success
-- name: slack-fail
-  commands: 
-    - cp /root/slack/message.sh .
-    - sh message.sh 
-  when: 
-    status: failure
+    status: 
+      - success
+      - failure 
