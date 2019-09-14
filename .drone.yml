@@ -24,7 +24,7 @@ steps:
 - name: docker compose (deploy)
   commands:
     - cp /root/docker-compose.yml .
-    - docker-compose pull
+    - docker-compose pull auth-server
     - docker-compose up -d --force-recreate 
 - name: slack
   commands: 
