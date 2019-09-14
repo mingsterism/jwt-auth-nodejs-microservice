@@ -2,35 +2,37 @@ kind: pipeline
 type: ssh
 name: default
 
-server: 
-    host: 165.22.104.56 
-    user: root
-    ssh_key: 
-        from_secret: key002
+server:
+  host: 165.22.104.56
+  user: root
+  ssh_key:
+    from_secret: key002
 
 steps:
-- name: authorize google
-  commands:
-    - gcloud config set project zoa001 
-    - gcloud auth activate-service-account zoa-service-acct@zoa001.iam.gserviceaccount.com --key-file=/root/secrets/.creds.json
-    - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/web
-    - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/fileserver
-    - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/jwt
-    - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/caddy-server
-    - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/graphql-server
-- name: cloudbuild jwt-auth-nodejs-microservice 
-  commands:
-    - gcloud builds submit
-- name: docker compose (deploy)
-  commands:
-    - cp /root/docker-compose.yml .
-    - docker-compose pull auth-server
-    - docker-compose up -d --force-recreate 
-- name: slack
-  commands: 
-    - cp /root/slack/message.sh .
-    - sh message.sh 
-  when: 
-    status: 
-      - success
-      - failure 
+  - name: authorize google
+    commands:
+      - gcloud config set project zoa001
+      - gcloud auth activate-service-account zoa-service-acct@zoa001.iam.gserviceaccount.com --key-file=/root/secrets/.creds.json
+      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/web
+      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/fileserver
+      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/jwt
+      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/caddy-server
+      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/graphql-server
+  - name: cloudbuild jwt-auth-nodejs-microservice
+    commands:
+      - gcloud builds submit
+  - name: docker compose (deploy)
+    commands:
+      - cp /root/docker-compose.yml .
+      - docker-compose pull auth-server
+      - docker-compose up -d --force-recreate
+  - name: slack
+    commands:
+      - cp /root/slack/message.sh .
+      - sh message.sh
+    when:
+      status:
+        - success
+        - failure
+trigger:
+  branch: master
