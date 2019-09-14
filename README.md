@@ -1,3 +1,6 @@
+
+[![Build Status](https://drone.zoadesk.io/api/badges/mingsterism/jwt-auth-nodejs-microservice/status.svg)](https://drone.zoadesk.io/mingsterism/jwt-auth-nodejs-microservice)
+
 # JWT Authentication Microservice with NodeJS & MongoDB
 
 This is simple microservice for JWT Authentication with NodeJS & MongoDB.
