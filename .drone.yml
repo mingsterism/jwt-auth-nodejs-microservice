@@ -3,36 +3,49 @@ type: ssh
 name: default
 
 server:
-  host: 165.22.104.56
-  user: root
+  host: 35.187.228.78 
+  user: sudo-admin 
   ssh_key:
     from_secret: key002
 
 steps:
   - name: authorize google
+    environment:
+      GCLOUD_CREDENTIALS_BASE64:
+        from_secret: gcloud-credentials-base64
     commands:
-      - gcloud config set project zoa001
-      - gcloud auth activate-service-account zoa-service-acct@zoa001.iam.gserviceaccount.com --key-file=/root/secrets/.creds.json
-      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/web
-      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/fileserver
-      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/jwt
-      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/caddy-server
-      - cat /root/secrets/.creds.json | docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/graphql-server
-  - name: cloudbuild jwt-auth-nodejs-microservice
+      - echo $GCLOUD_CREDENTIALS_BASE64 >> .creds.base64.json
+      - cat .creds.base64.json
+      - base64 --decode .creds.base64.json > .creds.json 
+      - sudo gcloud auth activate-service-account zoa-service-acct@zoa001.iam.gserviceaccount.com --key-file=.creds.json
+      - cat .creds.json | sudo docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/web
+      - cat .creds.json | sudo docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/fileserver
+      - cat .creds.json | sudo docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/jwt
+      - cat .creds.json | sudo docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/caddy-server
+      - cat .creds.json | sudo docker login -u _json_key --password-stdin https://asia.gcr.io/zoa001/graphql-server
+  - name: cloudbuild jwt-auth-nodejs-microservice 
     commands:
-      - gcloud builds submit
+      - sudo gcloud builds submit
   - name: docker compose (deploy)
     commands:
-      - cp /root/docker-compose.yml .
-      - docker-compose pull auth-server
-      - docker-compose up -d --force-recreate
+      - cp /home/sudo-admin/docker-compose.yml .
+      - sudo docker-compose pull auth-server 
+      - sudo docker-compose up -d --force-recreate
   - name: slack
     commands:
-      - cp /root/slack/message.sh .
+      - cp /home/sudo-admin/slack/message.sh .
       - sh message.sh
     when:
       status:
         - success
         - failure
+
 trigger:
-  branch: master
+  branch: 
+    - master
+    - develop 
+
+---
+kind: secret
+name: gcloud-credentials-base64 
+data: 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 
