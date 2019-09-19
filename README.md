@@ -14,7 +14,6 @@ git clone https://github.com/asepmaulanaismail/jwt-auth-nodejs-microservice
 cd jwt-auth-nodejs-microservice/
 node server.js
 ```
-
 or
 
 ```
