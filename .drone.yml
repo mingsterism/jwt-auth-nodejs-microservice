@@ -3,7 +3,7 @@ type: ssh
 name: default
 
 server:
-  host: 35.187.228.78 
+  host: 35.247.140.17
   user: sudo-admin 
   ssh_key:
     from_secret: key002
