@@ -6,7 +6,7 @@ server:
   host: 35.247.140.17
   user: sudo-admin 
   ssh_key:
-    from_secret: key002
+    from_secret: zoa-admin-ssh 
 
 steps:
   - name: authorize google
@@ -30,7 +30,7 @@ steps:
     commands:
       - cp /home/sudo-admin/docker-compose.yml .
       - sudo docker-compose pull auth-server 
-      - sudo docker-compose up -d --force-recreate
+      - sudo docker-compose up -d --build
   - name: slack
     commands:
       - cp /home/sudo-admin/slack/message.sh .
@@ -43,7 +43,6 @@ steps:
 trigger:
   branch: 
     - master
-    - develop 
 
 ---
 kind: secret
