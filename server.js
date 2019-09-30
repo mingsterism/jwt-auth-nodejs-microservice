@@ -23,7 +23,15 @@ mongoose.connect(config.database); // connect to database
 app.set("superSecret", config.secret); // secret variable
 
 // cookieParser and cors
-app.use(cors({ origin: "http://35.247.140.17:2015", credentials: true }));
+var cookieDomain =
+  process.env.NODE_ENV === "development"
+    ? process.env.COOKIE_DOMAIN_DEVELOPMENT
+    : process.env.COOKIE_DOMAIN_PRODUCTION;
+var corsOrigin =
+  process.env.NODE_ENV === "development"
+    ? process.env.CORS_ORIGIN_DEVELOPMENT
+    : process.env.CORS_ORIGIN_PRODUCTION;
+app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(cookieParser());
 
 // use body parser so we can get info from POST and/or URL parameters
@@ -287,7 +295,7 @@ apiRoutes.post("/authenticate", function(req, res) {
               {
                 maxAge: 86400000,
                 path: "/",
-                domain: "35.247.140.17"
+                domain: '127.0.0.1'
               }
             );
 

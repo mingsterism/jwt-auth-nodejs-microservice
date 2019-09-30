@@ -6,6 +6,13 @@ services:
       - "8080:8080"
     depends_on:
       - mongo-server
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - CORS_ORIGIN_DEVELOPMENT=http://127.0.0.1:8081
+      - CORS_ORIGIN_PRODUCTION=http://35.247.140.17:2015
+      - COOKIE_DOMAIN_DEVELOPMENT=127.0.0.1
+      - COOKIE_DOMAIN_PRODUCTION=35.247.140.17
   mongo-server:
     image: mongo:4.0
     container_name: "mongodb"
